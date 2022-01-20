@@ -79,5 +79,9 @@ bin/pulsar-admin sinks get --tenant public --namespace default --name influxdb-s
 bin/pulsar-admin sinks status --tenant public --namespace default --name influxdb-sink-jetson
 ````
 
+## Run Java 
 
+````
+java -jar /opt/demo/energy/EnergyProducer-1.0-jar-with-dependencies.jar --serviceUrl pulsar://pulsar1:6650 --topic 'persistent://public/default/energy-influx'
+````
 

@@ -216,8 +216,10 @@ public class EnergyProducer {
             device.tags.put("topic", topic);
             device.tags.put("os", os);
             device.fields = Maps.newHashMap();
-            device.fields.put("power",  String.format("%s",energy.getPower()));
-            device.fields.put("value", String.format("%s",energy.getCurrent()));
+            device.fields.put("power",  energy.getPower());
+            device.fields.put("value", energy.getCurrent());
+//            device.fields.put("power",  String.format("%s",energy.getPower()));
+//            device.fields.put("value", String.format("%s",energy.getCurrent()));
         } catch (Exception e) {
             e.printStackTrace();
         }
