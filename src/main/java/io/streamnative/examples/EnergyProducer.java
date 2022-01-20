@@ -52,21 +52,21 @@ public class EnergyProducer {
         System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
         Logger logger = LoggerFactory.getLogger(EnergyProducer.class);
 
-        logger.info("Available processors (cores): " +
+        logger.debug("Available processors (cores): " +
                 Runtime.getRuntime().availableProcessors());
 
         /* Total amount of free memory available to the JVM */
-        logger.info("Free memory (bytes): " +
+        logger.debug("Free memory (bytes): " +
                 Runtime.getRuntime().freeMemory());
 
         /* This will return Long.MAX_VALUE if there is no preset limit */
         long maxMemory = Runtime.getRuntime().maxMemory();
         /* Maximum amount of memory the JVM will attempt to use */
-        logger.info("Maximum memory (bytes): " +
+        logger.debug("Maximum memory (bytes): " +
                 (maxMemory == Long.MAX_VALUE ? "no limit" : maxMemory));
 
         /* Total memory currently available to the JVM */
-        logger.info("Total memory available to JVM (bytes): " +
+        logger.debug("Total memory available to JVM (bytes): " +
                 Runtime.getRuntime().totalMemory());
 
         JCommanderPulsar jct = new JCommanderPulsar();
@@ -126,8 +126,8 @@ public class EnergyProducer {
 
             try {
                 consumer.acknowledge(msg);
-                logger.info("Acked message [" + msg.getMessageId() + "], Total messages acked so far: " + messageCount);
-                logger.info("Total Messages Received: " + consumer.getStats().getTotalMsgsReceived());
+                logger.debug("Acked message [" + msg.getMessageId() + "], Total messages acked so far: " + messageCount);
+                logger.debug("Total Messages Received: " + consumer.getStats().getTotalMsgsReceived());
 
                 if (msg == null || msg.getData() == null) {
                     throw new Exception("No message");
@@ -149,7 +149,6 @@ public class EnergyProducer {
                     break;
                 }
                 pulsarKey = buildKey();
-
                 msgID = producer.newMessage()
                         .key(pulsarKey)
                         .value(buildInfluxMessage("pulsar1", topic, energyMsg, OS))
@@ -217,12 +216,10 @@ public class EnergyProducer {
             device.tags.put("topic", topic);
             device.tags.put("os", os);
             device.fields = Maps.newHashMap();
-            device.fields.put("power", energy.getCurrent());
-            device.fields.put("value", energy.getCurrent());
+            device.fields.put("power",  String.format("%s",energy.getPower()));
+            device.fields.put("value", String.format("%s",energy.getCurrent()));
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            device = new Device();
         }
         return device;
     }
@@ -232,7 +229,6 @@ public class EnergyProducer {
      * @return IoTMessage
      */
     private static Energy parseMessage(String message) {
-
         Energy energyMessage = null;
 
         try {
