@@ -27,6 +27,19 @@ pulsar
 
 https://us-Location.aws.cloud2.influxdata.com/notebook/from/bucket/pulsar
 
+## Create Pulsar Topics
+
+## setup
+
+````
+
+bin/pulsar-admin topics create persistent://public/default/energydead
+bin/pulsar-admin topics create persistent://public/default/energylog
+bin/pulsar-admin topics create persistent://public/default/energy
+bin/pulsar-admin topics create persistent://public/default/energy-influx
+
+````
+
 ## Create a Pulsar IO Connector for InfluxDB v2 Sink
 
 ## Config conf/influxcloud.yml
@@ -84,4 +97,5 @@ bin/pulsar-admin sinks status --tenant public --namespace default --name influxd
 ````
 java -jar /opt/demo/energy/EnergyProducer-1.0-jar-with-dependencies.jar --serviceUrl pulsar://pulsar1:6650 --topic 'persistent://public/default/energy-influx'
 ````
+
 
